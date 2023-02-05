@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "dbcl"
+version = "0.1.22"
+description = "A database command line interface that is engine-agnostic."
+authors = ["Kris Steinhoff <ksteinhoff@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+SQLAlchemy = "^1.4.46"
+prompt-toolkit = "^2.0.10"
+pygments = "^2.2.0"
+terminaltables = "^3.1.0"
+
+[tool.poetry.scripts]
+dbcl = "dbcl.command_line:command_loop"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.1"
+pytest-mock = "^3.10.0"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
