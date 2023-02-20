@@ -11,6 +11,7 @@ jobs:
         os: ["ubuntu-20.04"]
         linter-command:
           - poetry run pylint dbcl
+          - poetry run bandit dbcl
           - poetry run black --check --diff .
 
     runs-on: ${{ matrix.os }}
@@ -23,7 +24,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: "poetry"
-      # - if: ${{ steps.cache-poetry-venv.outputs.cache-hit != 'true' }}
       - name: Install dependencies
         run: |
           poetry install
