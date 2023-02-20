@@ -1,0 +1,19 @@
+name: Poetry Command
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        linter-command:
+          - poetry run pylint dbcl
+          - poetry run bandit dbcl
+          - poetry run black --check --diff .
+
+    runs-on: "ubuntu-20.04"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/workflows/poetry-command.yml
+        with:
+          poetry-command: ${{ matrix.linter-command }}

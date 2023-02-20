@@ -1,0 +1,38 @@
+name: Poetry Command
+
+on:
+  workflow_call:
+    inputs:
+      poetry-command:
+        required: true
+        type: string
+      python-version:
+        required: true
+        type: string
+        default: "3.10"
+      poetry-version:
+        required: true
+        type: string
+        default: "1.3.2"
+      os:
+        required: true
+        type: string
+        default: "ubuntu-20.04"
+
+jobs:
+  command:
+    runs-on: ${{ input.os }}
+    steps:
+      - name: Install poetry ${{ input.poetry-version }}
+        run: pipx install poetry==${{ input.poetry-version }}
+      - name: Set up Python ${{ input.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ input.python-version }}
+          cache: "poetry"
+      - name: Install dependencies
+        run: |
+          poetry install
+      - name: Running command "${{ input.poetry-command }}"
+        run: |
+          ${{ input.linter-command }}
