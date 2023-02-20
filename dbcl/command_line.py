@@ -116,8 +116,7 @@ def process_command(cmd, connection, args):
     if cmd_argv[0] == f"{COMMAND_PREFIX}info":
         process_command_info(cmd_argv[1:], connection, args)
     elif (
-        cmd_argv[0] == f"{COMMAND_PREFIX}exit"
-        or cmd_argv[0] == f"{COMMAND_PREFIX}quit"
+        cmd_argv[0] == f"{COMMAND_PREFIX}exit" or cmd_argv[0] == f"{COMMAND_PREFIX}quit"
     ):
         sys.exit(0)
     else:
