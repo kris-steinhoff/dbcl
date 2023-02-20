@@ -12,8 +12,6 @@ SQLAlchemy = "^1.4.46"
 prompt-toolkit = "^2.0.10"
 pygments = "^2.2.0"
 terminaltables = "^3.1.0"
-pylint = "^2.16.2"
-black = "^23.1.0"
 
 [tool.poetry.scripts]
 dbcl = "dbcl.command_line:command_loop"
@@ -22,6 +20,9 @@ dbcl = "dbcl.command_line:command_loop"
 pytest = "^7.2.1"
 pytest-mock = "^3.10.0"
 pytest-cov = "^4.0.0"
+isort = "^5.12.0"
+pylint = "^2.16.2"
+black = "^23.1.0"
 
 [tool.pylint.messages_control]
 disable = [
