@@ -21,11 +21,20 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install poetry ${{ matrix.poetry-version }}
+        id: install-poetry
         run: |
           python -m pip install poetry==${{ matrix.poetry-version }}
-      - name: Install dependencies
+          echo POETRY_VENV=$(poetry config virtualenvs.path) >> $GITHUB_OUTPUT
+      - name: Cache the virtualenv
+        id: cache-poetry-venv
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.install-poetry.outputs.POETRY_VENV }}
+          key: poetry-venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - if: ${{ steps.cache-poetry-venv.outputs.cache-hit != 'true' }}
+        name: Install dependencies
         run: |
           poetry install
-      - name: Analyzing the code with pylint
+      - name: Analyzing the code with "${{ matrix.linter-command }}"
         run: |
           ${{ matrix.linter-command }}
