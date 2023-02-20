@@ -5,3 +5,13 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+  - repo: local
+    hooks:
+      - id: local-pylint
+        name: Run pylint
+        language: system
+        entry: make pylint
+      - id: local-black-check
+        name: Run black --check
+        language: system
+        entry: make black

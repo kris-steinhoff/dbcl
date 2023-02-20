@@ -4,4 +4,4 @@ pylint:
 	poetry run pylint dbcl
 
 black:
-	poetry run black .
+	poetry run black --check .
