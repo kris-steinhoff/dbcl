@@ -8,7 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import MetaData, Table
 from sqlalchemy.exc import ResourceClosedError, NoSuchTableError
 
-from pygments.lexers import SqlLexer
+from pygments.lexers.sql import SqlLexer
 
 from prompt_toolkit.shortcuts import prompt
 from prompt_toolkit.lexers import PygmentsLexer
@@ -17,17 +17,17 @@ from prompt_toolkit.history import FileHistory
 from terminaltables import SingleTable
 
 
-_command_prefix = "--"
+COMMAND_PREFIX = "--"
 
 
 def prompt_for_url():
     url_from_env = os.getenv("DATABASE_URL", "")
     try:
-        input_url = prompt("Connect to [%s]: " % url_from_env)
+        input_url = prompt(f"Connect to [{url_from_env}]: ")
         if len(input_url) > 0:
             return input_url
-        else:
-            return url_from_env
+
+        return url_from_env
 
     except KeyboardInterrupt:
         sys.exit(1)
@@ -58,8 +58,8 @@ def get_args(arguments):
 def get_engine(args):
     try:
         return create_engine(args.database_url)
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
         sys.exit(1)
 
 
@@ -69,7 +69,7 @@ def print_data(data):
 
 def print_result(result):
     try:
-        print_data([result.keys()] + [row for row in result])
+        print_data([result.keys()] + list(result))
     except ResourceClosedError:
         pass
 
@@ -87,8 +87,8 @@ _column_info_mapping = (
 def _print_table_info(table, connection):
     try:
         table_info = Table(table, MetaData(connection), autoload=True)
-    except NoSuchTableError as e:
-        print('No such table "%s"' % e)
+    except NoSuchTableError as exc:
+        print(f'No such table "{exc}"')
         return
 
     data = [[m[0] for m in _column_info_mapping]]
@@ -100,7 +100,7 @@ def _print_table_info(table, connection):
 
 def process_command_info(info_args, connection, args):
     if len(info_args) > 1:
-        print("usage: %sinfo [table_name]" % _command_prefix)
+        print(f"usage: {COMMAND_PREFIX}info [table_name]")
     elif len(info_args) == 0:
         print_data([["Database URL"]] + [[args.database_url]])
 
@@ -113,21 +113,21 @@ def process_command_info(info_args, connection, args):
 
 def process_command(cmd, connection, args):
     cmd_argv = cmd.split()
-    if cmd_argv[0] == "%sinfo" % _command_prefix:
+    if cmd_argv[0] == f"{COMMAND_PREFIX}info":
         process_command_info(cmd_argv[1:], connection, args)
     elif (
-        cmd_argv[0] == "%sexit" % _command_prefix
-        or cmd_argv[0] == "%squit" % _command_prefix
+        cmd_argv[0] == f"{COMMAND_PREFIX}exit"
+        or cmd_argv[0] == f"{COMMAND_PREFIX}quit"
     ):
         sys.exit(0)
     else:
-        print('Bad command "%s"' % cmd)
+        print(f'Bad command "{cmd}"')
 
 
 def prompt_for_command(args, connection, history):
     try:
         cmd = prompt("> ", lexer=PygmentsLexer(SqlLexer), history=history)
-        if cmd.startswith(_command_prefix):
+        if cmd.startswith(COMMAND_PREFIX):
             process_command(cmd, connection, args)
         else:
             result = connection.execute(cmd)
@@ -136,8 +136,8 @@ def prompt_for_command(args, connection, history):
         return
     except EOFError:
         sys.exit(0)
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
         return
 
 
@@ -145,8 +145,8 @@ def command_loop():
     args = get_args(sys.argv[1:])
     try:
         connection = get_engine(args).connect()
-    except Exception as e:
-        print(e)
+    except Exception as exc:
+        print(exc)
         sys.exit(1)
     history = FileHistory(os.path.expanduser("~/.dbcl_history"))
 

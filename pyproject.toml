@@ -23,6 +23,23 @@ pytest = "^7.2.1"
 pytest-mock = "^3.10.0"
 pytest-cov = "^4.0.0"
 
+[tool.pylint.messages_control]
+disable = [
+  "missing-docstring",
+  "no-value-for-parameter",
+  "no-member",
+  "broad-exception-caught",
+#   "no-else-return",
+#   "bad-whitespace",
+#   "bad-continuation",
+#   "line-too-long",
+  "fixme",
+#   "protected-access",
+#   "too-few-public-methods",
+]
+
+
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
