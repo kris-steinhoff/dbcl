@@ -1,4 +1,4 @@
-name: Pylint
+name: Linting
 
 on: [push]
 
@@ -6,9 +6,13 @@ jobs:
   build:
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.10"]
         poetry-version: ["1.3.2"]
-        os: ["ubuntu-10.04"]
+        os: ["ubuntu-18.04"]
+        linter-command:
+          - poetry run pylint dbcl
+          - poetry run black --check --diff .
+
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
@@ -24,4 +28,4 @@ jobs:
           poetry install
       - name: Analyzing the code with pylint
         run: |
-          poetry run pylint dbcl
+          ${{ matrix.linter-command }}
