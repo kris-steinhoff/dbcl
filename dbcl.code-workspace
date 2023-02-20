@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.linting.enabled": true,
+		"python.linting.banditEnabled": false,
+		"python.linting.flake8Enabled": false,
+		"python.linting.pylintEnabled": true,
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black",
+		"isort.args": [
+			"--profile",
+			"black"
+		],
+		"[python]": {
+			"editor.codeActionsOnSave": {
+				"source.organizeImports": true,
+			}
+		}
+	}
+}
