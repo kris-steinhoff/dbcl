@@ -16,23 +16,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install poetry ${{ matrix.poetry-version }}
+        run: pipx install poetry==${{ matrix.poetry-version }}
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install poetry ${{ matrix.poetry-version }}
-        id: install-poetry
-        run: |
-          python -m pip install poetry==${{ matrix.poetry-version }}
-          echo POETRY_VENV=$(poetry config virtualenvs.path) >> $GITHUB_OUTPUT
-      - name: Cache the virtualenv
-        id: cache-poetry-venv
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.install-poetry.outputs.POETRY_VENV }}
-          key: poetry-venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      - if: ${{ steps.cache-poetry-venv.outputs.cache-hit != 'true' }}
-        name: Install dependencies
+          cache: "poetry"
+      # - if: ${{ steps.cache-poetry-venv.outputs.cache-hit != 'true' }}
+      - name: Install dependencies
         run: |
           poetry install
       - name: Analyzing the code with "${{ matrix.linter-command }}"
