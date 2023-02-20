@@ -1,21 +1,16 @@
 from __future__ import unicode_literals
 
-import sys
-import os
 import argparse
-
-from sqlalchemy import create_engine
-from sqlalchemy import MetaData, Table
-from sqlalchemy.exc import ResourceClosedError, NoSuchTableError
-
-from pygments.lexers.sql import SqlLexer
-
-from prompt_toolkit.shortcuts import prompt
-from prompt_toolkit.lexers import PygmentsLexer
+import os
+import sys
 
 from prompt_toolkit.history import FileHistory
+from prompt_toolkit.lexers import PygmentsLexer
+from prompt_toolkit.shortcuts import prompt
+from pygments.lexers.sql import SqlLexer
+from sqlalchemy import MetaData, Table, create_engine
+from sqlalchemy.exc import NoSuchTableError, ResourceClosedError
 from terminaltables import SingleTable
-
 
 COMMAND_PREFIX = "--"
 
