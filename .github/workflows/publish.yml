@@ -25,4 +25,4 @@ jobs:
           poetry build
       - name: Running command "poetry publish"
         run: |
-          poetry build
+          poetry publish --username=__token__ --password=${{ secrets.PYPI_TOKEN }}
