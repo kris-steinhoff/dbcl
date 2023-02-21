@@ -1,4 +1,4 @@
-name: Poetry Command
+name: Lint & Test
 
 on: [push, pull_request]
 
@@ -55,31 +55,6 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install
-      - name: Running command "${{ matrix.command }}"
-        run: |
-          ${{ matrix.command }}
-
-  build:
-    needs: ["lint", "test"]
-    strategy:
-      matrix:
-        python-version: ["3.11"]
-        poetry-version: ["1.3.2"]
-        os: ["ubuntu-22.04"]
-        command:
-          - poetry build
-
-    name: "${{ matrix.command }} (Python ${{ matrix.python-version}} Poetry ${{ matrix.poetry-version}} ${{ matrix.os}})"
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install poetry ${{ matrix.poetry-version }}
-        run: pipx install poetry==${{ matrix.poetry-version }}
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: "poetry"
       - name: Running command "${{ matrix.command }}"
         run: |
           ${{ matrix.command }}
