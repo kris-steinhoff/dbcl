@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dbcl"
-version = "0.1.23"
+version = "0.1.24"
 description = "A database command line interface that is engine-agnostic."
 authors = ["Kris Steinhoff <ksteinhoff@gmail.com>"]
 license = "MIT"
